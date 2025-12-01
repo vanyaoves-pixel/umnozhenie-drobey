@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Смешанные числа и дроби</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #eef3ff;
+      color: #222;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+    }
+
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    .layout {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 18px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      flex: 1 1 280px;
+      min-width: 0;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+    }
+
+    .card h3 {
+      margin-top: 12px;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+
+    .algorithm-list {
+      padding-left: 18px;
+      margin: 6px 0 10px;
+      font-size: 0.95rem;
+    }
+
+    .example {
+      background: #f4f6ff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 0.95rem;
+      margin-top: 8px;
+    }
+
+    .toggle-btn {
+      margin-top: 8px;
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      border-radius: 8px;
+      border: 1px solid #ccd4ff;
+      background: #f5f6ff;
+      cursor: pointer;
+    }
+
+    .toggle-btn:hover {
+      background: #e8ebff;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Дроби и задание */
+    .task {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .task-label {
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    .mixed {
+      font-weight: 600;
+    }
+
+    .fraction {
+      display: inline-block;
+      text-align: center;
+      vertical-align: middle;
+      margin: 0 2px;
+    }
+
+    .fraction .num {
+      display: block;
+      border-bottom: 2px solid #000;
+      padding: 0 4px 2px;
+    }
+
+    .fraction .den {
+      display: block;
+      padding-top: 2px;
+    }
+
+    .controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+
+    select, input[type="number"] {
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid #ccd0e0;
+      font-size: 0.95rem;
+      min-width: 80px;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: #4b6bff;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .btn.secondary {
+      background: #f0f2ff;
+      color: #333;
+      border: 1px solid #ccd4ff;
+    }
+
+    .btn:hover {
+      filter: brightness(1.05);
+    }
+
+    .answers-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .answers-row label {
+      margin-right: 4px;
+    }
+
+    .feedback {
+      min-height: 22px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .feedback.correct {
+      color: #0a8a2a;
+    }
+
+    .feedback.wrong {
+      color: #d32f2f;
+    }
+
+    .explanation {
+      font-size: 0.96rem;
+      background: #f7f7ff;
+      border-radius: 10px;
+      padding: 8px 10px;
+      min-height: 30px;
+    }
+
+    .score {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .score span {
+      font-weight: 700;
+    }
+
+    .tip {
+      font-size: 0.85rem;
+      margin-top: 8px;
+      color: #555;
+    }
+
+    .answer-whole {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-right: 4px;
+    }
+
+    .answer-whole.hidden {
+      display: none;
+    }
+
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 1.4rem;
+      }
+      .task {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Смешанные числа и дроби</h1>
+      <p>5&nbsp;класс: перевод и умножение дробей.</p>
+    </header>
+
+    <main class="layout">
+      <!-- Блок с алгоритмом -->
+      <section class="card">
+        <h2 id="algoTitle">Алгоритм: смешанное → неправильная дробь</h2>
+        <p id="algoDescription">
+          <strong>Смешанное число</strong> — это <strong>целая часть</strong> и <strong>правильная дробь</strong> рядом.
+        </p>
+
+        <h3>Шаги алгоритма</h3>
+        <ol class="algorithm-list" id="algoSteps">
+          <li><strong>Посмотри</strong> на целую часть и знаменатель.</li>
+          <li><strong>Умножь</strong> целую часть на знаменатель.</li>
+          <li><strong>Прибавь</strong> к результату числитель.</li>
+          <li><strong>Оставь</strong> знаменатель таким же.</li>
+          <li><strong>Запиши</strong> результат в виде дроби.</li>
+        </ol>
+
+        <div class="example" id="algoExample">
+          <strong>Пример.</strong><br>
+          Было:
+          <span class="mixed">
+            3
+            <span class="fraction">
+              <span class="num">2</span>
+              <span class="den">5</span>
+            </span>
+          </span><br>
+          1) <strong>3 × 5 = 15</strong><br>
+          2) <strong>15 + 2 = 17</strong><br>
+          Получили:
+          <strong>
+            <span class="fraction">
+              <span class="num">17</span>
+              <span class="den">5</span>
+            </span>
+          </strong>
+        </div>
+
+        <button class="toggle-btn" id="toggleHelpBtn">Скрыть/показать краткую подсказку</button>
+
+        <div id="shortHelp">
+          <h3>Короткая формула</h3>
+          <p>
+            <strong>
+              <span class="fraction">
+                <span class="num">(целая часть × знаменатель + числитель)</span>
+                <span class="den">знаменатель</span>
+              </span>
+            </strong>
+          </p>
+          <p class="tip">Говорим вслух: «целую часть умножаю на знаменатель, прибавляю числитель».</p>
+        </div>
+      </section>
+
+      <!-- Тренажёр -->
+      <section class="card">
+        <h2>Тренажёр</h2>
+
+        <div class="controls-row">
+          <label for="mode"><strong>Режим:</strong></label>
+          <select id="mode">
+            <option value="mixedToImproper">Смешанное → неправильная дробь</option>
+            <option value="improperToMixed">Неправильная дробь → смешанное</option>
+            <option value="multiply">Умножение дробей и смешанных чисел</option>
+          </select>
+
+          <label for="difficulty"><strong>Уровень:</strong></label>
+          <select id="difficulty">
+            <option value="easy">Лёгкий</option>
+            <option value="medium">Средний</option>
+            <option value="hard">Сложный</option>
+          </select>
+
+          <button class="btn secondary" id="newTaskBtn">Новый пример</button>
+        </div>
+
+        <div class="task">
+          <span class="task-label" id="taskLabel">Переведи в неправильную дробь:</span>
+          <span id="taskContent">?</span>
+        </div>
+
+        <div class="answers-row">
+          <label><strong>Ответ:</strong></label>
+
+          <span id="answerWholeBlock" class="answer-whole hidden">
+            <span>целая часть</span>
+            <input type="number" id="answerWhole" placeholder="целая">
+          </span>
+
+          <span class="fraction">
+            <span class="num">
+              <input type="number" id="answerNum" placeholder="числитель">
+            </span>
+            <span class="den">
+              <input type="number" id="answerDen" placeholder="знаменатель">
+            </span>
+          </span>
+          <button class="btn" id="checkBtn">Проверить</button>
+        </div>
+
+        <div class="feedback" id="feedback"></div>
+
+        <div class="explanation" id="explanation">
+          Нажми «Новый пример», реши задание и затем «Проверить».
+        </div>
+
+        <div class="score" id="score">
+          Правильно: <span id="correctCount">0</span> из <span id="totalCount">0</span>
+        </div>
+
+        <p class="tip" id="modeTip">
+          Подсказка: сначала в уме посчитай новый числитель: «целую часть умножаю на знаменатель и прибавляю числитель».
+        </p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // ====== Общее состояние ======
+    let currentMode = 'mixedToImproper';
+
+    let total = 0;
+    let correct = 0;
+
+    // Базовая пара для режимов перевода (одна и та же для "туда" и "обратно")
+    let baseWhole = null;
+    let baseNum = null;
+    let baseDen = null;
+    let baseImproperNum = null;
+
+    // Состояние для умножения
+    let mulType = null; // 'ff', 'mf', 'mm'
+    let aIsMixed = false, bIsMixed = false;
+    let aWhole = 0, aNum = 0, aDen = 1;
+    let bWhole = 0, bNum = 0, bDen = 1;
+    let aNumImp = 0, aDenImp = 1, bNumImp = 0, bDenImp = 1;
+    let mulResultNum = 0, mulResultDen = 1;
+
+    // ====== DOM-элементы ======
+    const algoTitleEl = document.getElementById('algoTitle');
+    const algoDescriptionEl = document.getElementById('algoDescription');
+    const algoStepsEl = document.getElementById('algoSteps');
+    const algoExampleEl = document.getElementById('algoExample');
+    const shortHelpEl = document.getElementById('shortHelp');
+    const toggleHelpBtn = document.getElementById('toggleHelpBtn');
+
+    const modeEl = document.getElementById('mode');
+    const difficultyEl = document.getElementById('difficulty');
+    const newTaskBtn = document.getElementById('newTaskBtn');
+    const checkBtn = document.getElementById('checkBtn');
+
+    const taskLabelEl = document.getElementById('taskLabel');
+    const taskContentEl = document.getElementById('taskContent');
+
+    const answerWholeBlockEl = document.getElementById('answerWholeBlock');
+    const answerWholeEl = document.getElementById('answerWhole');
+    const answerNumEl = document.getElementById('answerNum');
+    const answerDenEl = document.getElementById('answerDen');
+
+    const feedbackEl = document.getElementById('feedback');
+    const explanationEl = document.getElementById('explanation');
+    const correctCountEl = document.getElementById('correctCount');
+    const totalCountEl = document.getElementById('totalCount');
+    const modeTipEl = document.getElementById('modeTip');
+
+    // ====== Вспомогательные функции отрисовки дробей ======
+    function fractionHTML(num, den) {
+      return (
+        '<span class="fraction">' +
+          '<span class="num">' + num + '</span>' +
+          '<span class="den">' + den + '</span>' +
+        '</span>'
+      );
+    }
+
+    function mixedHTML(whole, num, den) {
+      return (
+        '<span class="mixed">' +
+          whole + ' ' +
+          fractionHTML(num, den) +
+        '</span>'
+      );
+    }
+
+    // Случайное целое [min, max]
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // ====== Обновление алгоритма под режим ======
+    function updateAlgorithmCard() {
+      if (currentMode === 'mixedToImproper') {
+        algoTitleEl.textContent = 'Алгоритм: смешанное → неправильная дробь';
+        algoDescriptionEl.innerHTML = '<strong>Смешанное число</strong> — это <strong>целая часть</strong> и <strong>правильная дробь</strong> рядом.';
+
+        algoStepsEl.innerHTML = `
+          <li><strong>Посмотри</strong> на целую часть и знаменатель.</li>
+          <li><strong>Умножь</strong> целую часть на знаменатель.</li>
+          <li><strong>Прибавь</strong> к результату числитель.</li>
+          <li><strong>Оставь</strong> знаменатель таким же.</li>
+          <li><strong>Запиши</strong> результат в виде дроби.</li>
+        `;
+
+        algoExampleEl.innerHTML = `
+          <strong>Пример.</strong><br>
+          Было: ${mixedHTML(3, 2, 5)}<br>
+          1) <strong>3 × 5 = 15</strong><br>
+          2) <strong>15 + 2 = 17</strong><br>
+          Получили: <strong>${fractionHTML(17, 5)}</strong>
+        `;
+
+        shortHelpEl.innerHTML = `
+          <h3>Короткая формула</h3>
+          <p>
+            <strong>
+              <span class="fraction">
+                <span class="num">(целая часть × знаменатель + числитель)</span>
+                <span class="den">знаменатель</span>
+              </span>
+            </strong>
+          </p>
+          <p class="tip">Говорим вслух: «целую часть умножаю на знаменатель, прибавляю числитель».</p>
+        `;
+
+        modeTipEl.textContent =
+          'Подсказка: сначала в уме посчитай новый числитель, а потом записывай дробь.';
+      } else if (currentMode === 'improperToMixed') {
+        algoTitleEl.textContent = 'Алгоритм: неправильная дробь → смешанное число';
+        algoDescriptionEl.innerHTML =
+          '<strong>Неправильная дробь</strong> — числитель больше или равен знаменателю. Нужно выделить целую часть.';
+
+        algoStepsEl.innerHTML = `
+          <li><strong>Раздели</strong> числитель на знаменатель.</li>
+          <li><strong>Сколько целых</strong> получилось — это целая часть.</li>
+          <li><strong>Остаток</strong> от деления — новый числитель.</li>
+          <li><strong>Знаменатель</strong> остаётся тем же.</li>
+          <li><strong>Запиши</strong> ответ: целая часть и дробь.</li>
+        `;
+
+        algoExampleEl.innerHTML = `
+          <strong>Пример.</strong><br>
+          Было: ${fractionHTML(17, 5)}<br>
+          1) 17 ÷ 5 = 3 (остаток 2)<br>
+          Получили: <strong>${mixedHTML(3, 2, 5)}</strong>
+        `;
+
+        shortHelpEl.innerHTML = `
+          <h3>Короткая подсказка</h3>
+          <p>Делим «сколько раз знаменатель поместится в числителе».</p>
+          <p class="tip">Числитель = знаменатель × целая часть + остаток.</p>
+        `;
+
+        modeTipEl.textContent =
+          'Подсказка: сначала раздели числитель на знаменатель, запиши целую часть и остаток.';
+      } else if (currentMode === 'multiply') {
+        algoTitleEl.textContent = 'Алгоритм: умножение дробей и смешанных чисел';
+        algoDescriptionEl.innerHTML =
+          'При умножении смешанных чисел сначала переводим их в неправильные дроби, потом перемножаем дроби.';
+
+        algoStepsEl.innerHTML = `
+          <li><strong>Если есть смешанные числа</strong> — переведи их в неправильные дроби.</li>
+          <li><strong>Перемножь</strong> числители.</li>
+          <li><strong>Перемножь</strong> знаменатели.</li>
+          <li><strong>При желании сократи</strong> дробь (если знаете сокращение).</li>
+          <li><strong>Ответ</strong> можно оставить неправильной дробью или выделить целую часть.</li>
+        `;
+
+        algoExampleEl.innerHTML = `
+          <strong>Пример.</strong><br>
+          ${mixedHTML(1, 1, 2)} × ${fractionHTML(3, 4)} = ${fractionHTML(3, 2)} × ${fractionHTML(3, 4)}
+          = ${fractionHTML(9, 8)}
+        `;
+
+        shortHelpEl.innerHTML = `
+          <h3>Короткая подсказка</h3>
+          <p>Смешанные числа → неправильные дроби, потом: числитель × числитель, знаменатель × знаменатель.</p>
+          <p class="tip">Можно потом сократить дробь или выделить целую часть.</p>
+        `;
+
+        modeTipEl.textContent =
+          'Подсказка: переведи смешанные числа в неправильные дроби, затем перемножь числители и знаменатели.';
+      }
+    }
+
+    // ====== Генерация задач ======
+    function generateMixedBase() {
+      const diff = difficultyEl.value;
+
+      let maxWhole, maxDen;
+      if (diff === 'easy') {
+        maxWhole = 5;
+        maxDen = 9;
+      } else if (diff === 'medium') {
+        maxWhole = 9;
+        maxDen = 12;
+      } else {
+        maxWhole = 12;
+        maxDen = 12;
+      }
+
+      baseDen = getRandomInt(2, maxDen);
+      baseWhole = getRandomInt(1, maxWhole);
+      baseNum = getRandomInt(1, baseDen - 1);
+      baseImproperNum = baseWhole * baseDen + baseNum;
+    }
+
+    function generateMixedTask() {
+      generateMixedBase();
+
+      if (currentMode === 'mixedToImproper') {
+        taskLabelEl.textContent = 'Переведи в неправильную дробь:';
+        taskContentEl.innerHTML = mixedHTML(baseWhole, baseNum, baseDen);
+        answerWholeBlockEl.classList.add('hidden');
+        answerWholeEl.value = '';
+        explanationEl.textContent =
+          'Применяй алгоритм: целую часть умножь на знаменатель и прибавь числитель.';
+      } else {
+        taskLabelEl.textContent = 'Выдели целую часть:';
+        taskContentEl.innerHTML = fractionHTML(baseImproperNum, baseDen);
+        answerWholeBlockEl.classList.remove('hidden');
+        explanationEl.textContent =
+          'Раздели числитель на знаменатель: сколько целых — целая часть, остаток — новый числитель.';
+      }
+
+      // Очистка ответов и сообщений
+      answerNumEl.value = '';
+      answerDenEl.value = '';
+      feedbackEl.textContent = '';
+      feedbackEl.classList.remove('correct', 'wrong');
+    }
+
+    function randomFractionByDifficulty() {
+      const diff = difficultyEl.value;
+      let maxDen;
+      if (diff === 'easy') maxDen = 9;
+      else maxDen = 12;
+
+      const den = getRandomInt(2, maxDen);
+      const num = getRandomInt(1, den - 1);
+      return { num, den };
+    }
+
+    function randomMixedByDifficulty() {
+      const diff = difficultyEl.value;
+      let maxWhole, maxDen;
+      if (diff === 'easy') {
+        maxWhole = 5;
+        maxDen = 9;
+      } else if (diff === 'medium') {
+        maxWhole = 8;
+        maxDen = 12;
+      } else {
+        maxWhole = 12;
+        maxDen = 12;
+      }
+
+      const den = getRandomInt(2, maxDen);
+      const whole = getRandomInt(1, maxWhole);
+      const num = getRandomInt(1, den - 1);
+      return { whole, num, den };
+    }
+
+    function generateMultiplyTask() {
+      taskLabelEl.textContent = 'Перемножь и запиши результат дробью:';
+      answerWholeBlockEl.classList.add('hidden');
+
+      // Выбор типа: дробь×дробь, смешанное×дробь, смешанное×смешанное
+      const typeIndex = getRandomInt(0, 2);
+      mulType = ['ff', 'mf', 'mm'][typeIndex];
+
+      if (mulType === 'ff') {
+        const f1 = randomFractionByDifficulty();
+        const f2 = randomFractionByDifficulty();
+
+        aIsMixed = false;
+        bIsMixed = false;
+        aWhole = 0;
+        bWhole = 0;
+        aNum = f1.num;
+        aDen = f1.den;
+        bNum = f2.num;
+        bDen = f2.den;
+      } else if (mulType === 'mf') {
+        const mix = randomMixedByDifficulty();
+        const frac = randomFractionByDifficulty();
+
+        // Случайно решаем, кто будет первым
+        if (getRandomInt(0, 1) === 0) {
+          aIsMixed = true;
+          bIsMixed = false;
+          aWhole = mix.whole;
+          aNum = mix.num;
+          aDen = mix.den;
+          bWhole = 0;
+          bNum = frac.num;
+          bDen = frac.den;
+        } else {
+          aIsMixed = false;
+          bIsMixed = true;
+          aWhole = 0;
+          aNum = frac.num;
+          aDen = frac.den;
+          bWhole = mix.whole;
+          bNum = mix.num;
+          bDen = mix.den;
+        }
+      } else { // mm
+        const mix1 = randomMixedByDifficulty();
+        const mix2 = randomMixedByDifficulty();
+
+        aIsMixed = true;
+        bIsMixed = true;
+        aWhole = mix1.whole;
+        aNum = mix1.num;
+        aDen = mix1.den;
+        bWhole = mix2.whole;
+        bNum = mix2.num;
+        bDen = mix2.den;
+      }
+
+      // Перевод в неправильные дроби
+      if (aIsMixed) {
+        aNumImp = aWhole * aDen + aNum;
+        aDenImp = aDen;
+      } else {
+        aNumImp = aNum;
+        aDenImp = aDen;
+      }
+
+      if (bIsMixed) {
+        bNumImp = bWhole * bDen + bNum;
+        bDenImp = bDen;
+      } else {
+        bNumImp = bNum;
+        bDenImp = bDen;
+      }
+
+      mulResultNum = aNumImp * bNumImp;
+      mulResultDen = aDenImp * bDenImp;
+
+      const leftHTML = aIsMixed ? mixedHTML(aWhole, aNum, aDen) : fractionHTML(aNum, aDen);
+      const rightHTML = bIsMixed ? mixedHTML(bWhole, bNum, bDen) : fractionHTML(bNum, bDen);
+
+      taskContentEl.innerHTML = leftHTML + ' × ' + rightHTML;
+
+      // Очистка ответов и сообщений
+      answerWholeEl.value = '';
+      answerNumEl.value = '';
+      answerDenEl.value = '';
+      feedbackEl.textContent = '';
+      feedbackEl.classList.remove('correct', 'wrong');
+      explanationEl.textContent =
+        'Если есть смешанные числа, переведи их в неправильные дроби, затем перемножь числители и знаменатели.';
+    }
+
+    function generateTask() {
+      if (currentMode === 'mixedToImproper' || currentMode === 'improperToMixed') {
+        generateMixedTask();
+      } else {
+        generateMultiplyTask();
+      }
+    }
+
+    // ====== Объяснения ======
+    function buildMixedToImproperExplanationHTML() {
+      const step1 = baseWhole + ' × ' + baseDen + ' + ' + baseNum;
+      const step2 = (baseWhole * baseDen) + ' + ' + baseNum;
+
+      const mixed = mixedHTML(baseWhole, baseNum, baseDen);
+      const frac1 =
+        '<span class="fraction"><span class="num">(' + step1 +
+        ')</span><span class="den">' + baseDen + '</span></span>';
+      const frac2 =
+        '<span class="fraction"><span class="num">(' + step2 +
+        ')</span><span class="den">' + baseDen + '</span></span>';
+      const result = fractionHTML(baseImproperNum, baseDen);
+
+      return mixed + ' = ' + frac1 + ' = ' + frac2 + ' = ' + result;
+    }
+
+    function buildImproperToMixedExplanationHTML() {
+      const improper = fractionHTML(baseImproperNum, baseDen);
+      const mixed = mixedHTML(baseWhole, baseNum, baseDen);
+      const text = baseImproperNum + ' ÷ ' + baseDen + ' = ' +
+        baseWhole + ' (остаток ' + baseNum + ')';
+
+      return improper + ' = ' + mixed + '<br>' + text;
+    }
+
+    function buildMultiplicationExplanationHTML() {
+      let html = '';
+
+      if (aIsMixed || bIsMixed) {
+        html += 'Сначала переводим смешанные числа в неправильные дроби:<br>';
+
+        if (aIsMixed) {
+          html += mixedHTML(aWhole, aNum, aDen) + ' = ' +
+                  fractionHTML(aNumImp, aDenImp) + '<br>';
+        } else {
+          html += fractionHTML(aNum, aDen) + ' — уже дробь.<br>';
+        }
+
+        if (bIsMixed) {
+          html += mixedHTML(bWhole, bNum, bDen) + ' = ' +
+                  fractionHTML(bNumImp, bDenImp) + '<br>';
+        } else {
+          html += fractionHTML(bNum, bDen) + ' — уже дробь.<br>';
+        }
+
+        html += '<br>';
+      }
+
+      html += 'Перемножаем дроби:<br>';
+      html += fractionHTML(aNumImp, aDenImp) + ' × ' +
+              fractionHTML(bNumImp, bDenImp) + ' = ' +
+              fractionHTML(mulResultNum, mulResultDen);
+
+      return html;
+    }
+
+    // ====== Проверка ответов ======
+    function checkMixedToImproper() {
+      if (baseDen === null) {
+        feedbackEl.textContent = 'Сначала нажми «Новый пример».';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+        return;
+      }
+
+      const userNum = parseInt(answerNumEl.value, 10);
+      const userDen = parseInt(answerDenEl.value, 10);
+
+      if (isNaN(userNum) || isNaN(userDen)) {
+        feedbackEl.textContent = 'Заполни оба поля: числитель и знаменатель.';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+        return;
+      }
+
+      total++;
+      totalCountEl.textContent = total.toString();
+
+      explanationEl.innerHTML = buildMixedToImproperExplanationHTML();
+
+      if (userNum === baseImproperNum && userDen === baseDen) {
+        correct++;
+        correctCountEl.textContent = correct.toString();
+        feedbackEl.textContent = 'Верно! Молодец 👍';
+        feedbackEl.classList.remove('wrong');
+        feedbackEl.classList.add('correct');
+        generateTask();
+      } else {
+        feedbackEl.textContent = 'Пока нет. Посмотри на объяснение и попробуй ещё раз или возьми новый пример.';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+      }
+    }
+
+    function checkImproperToMixed() {
+      if (baseDen === null) {
+        feedbackEl.textContent = 'Сначала нажми «Новый пример».';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+        return;
+      }
+
+      const userWhole = parseInt(answerWholeEl.value, 10);
+      const userNum = parseInt(answerNumEl.value, 10);
+      const userDen = parseInt(answerDenEl.value, 10);
+
+      if (isNaN(userWhole) || isNaN(userNum) || isNaN(userDen)) {
+        feedbackEl.textContent = 'Заполни целую часть, числитель и знаменатель.';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+        return;
+      }
+
+      total++;
+      totalCountEl.textContent = total.toString();
+
+      explanationEl.innerHTML = buildImproperToMixedExplanationHTML();
+
+      if (userWhole === baseWhole && userNum === baseNum && userDen === baseDen) {
+        correct++;
+        correctCountEl.textContent = correct.toString();
+        feedbackEl.textContent = 'Верно! Молодец 👍';
+        feedbackEl.classList.remove('wrong');
+        feedbackEl.classList.add('correct');
+        generateTask();
+      } else {
+        feedbackEl.textContent =
+          'Пока нет. Проверь деление: целая часть и остаток должны совпасть.';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+      }
+    }
+
+    function checkMultiply() {
+      if (mulResultDen === 0) {
+        feedbackEl.textContent = 'Сначала нажми «Новый пример».';
+      }
+
+      const userNum = parseInt(answerNumEl.value, 10);
+      const userDen = parseInt(answerDenEl.value, 10);
+
+      if (isNaN(userNum) || isNaN(userDen)) {
+        feedbackEl.textContent = 'Заполни числитель и знаменатель.';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+        return;
+      }
+
+      if (userDen === 0) {
+        feedbackEl.textContent = 'Знаменатель не может быть нулём.';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+        return;
+      }
+
+      total++;
+      totalCountEl.textContent = total.toString();
+
+      explanationEl.innerHTML = buildMultiplicationExplanationHTML();
+
+      // Проверяем по равенству дробей (можно не сокращать)
+      if (userNum * mulResultDen === userDen * mulResultNum) {
+        correct++;
+        correctCountEl.textContent = correct.toString();
+        feedbackEl.textContent = 'Верно! Молодец 👍';
+        feedbackEl.classList.remove('wrong');
+        feedbackEl.classList.add('correct');
+        generateTask();
+      } else {
+        feedbackEl.textContent =
+          'Пока нет. Проверь умножение числителей и знаменателей, посмотри объяснение.';
+        feedbackEl.classList.remove('correct');
+        feedbackEl.classList.add('wrong');
+      }
+    }
+
+    function checkAnswer() {
+      if (currentMode === 'mixedToImproper') {
+        checkMixedToImproper();
+      } else if (currentMode === 'improperToMixed') {
+        checkImproperToMixed();
+      } else {
+        checkMultiply();
+      }
+    }
+
+    // ====== Переключение режима ======
+    function onModeChange() {
+      currentMode = modeEl.value;
+      updateAlgorithmCard();
+      generateTask();
+    }
+
+    function toggleHelp() {
+      if (shortHelpEl.classList.contains('hidden')) {
+        shortHelpEl.classList.remove('hidden');
+      } else {
+        shortHelpEl.classList.add('hidden');
+      }
+    }
+
+    // ====== Обработчики ======
+    modeEl.addEventListener('change', onModeChange);
+    difficultyEl.addEventListener('change', generateTask);
+    newTaskBtn.addEventListener('click', generateTask);
+    checkBtn.addEventListener('click', checkAnswer);
+    toggleHelpBtn.addEventListener('click', toggleHelp);
+
+    // Старт
+    updateAlgorithmCard();
+    generateTask();
+  </script>
+</body>
+</html>
